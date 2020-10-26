@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css">
+    <title>Form Validation</title>
+    <style>
+      .invalid {
+        color: red;
+      }
+      .valid {
+        color: green;
+      }
+      .container {
+        background-color: #f1f1f1;
+        padding: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+    <h1>Validate your Form</h1>
+    <form id="form1"> 
+      <label for="email">Email</label>
+      <input type="text" id="email" /> <br />
+      <br />
+      <br />
+      <label for="password">Password</label>
+      <input type="password" id="password" />
+      <br />
+      <br />
+      <label for="ccn">Credit Card Number</label>
+      <input type="text" inputmode="numeric" id="ccn" /> <br />
+     
+      </div>
+      <br />
+      <h3>E-Mail Validation must contain the following:</h3>
+      <ul>
+        <li id="emailCheck" class="invalid">Is valid</li>
+      </ul>
+      <h3>Password must contain the following:</h3>
+      <ul>
+        <li id="lowercase" class="invalid">A <b>lowercase</b> letter</li>
+        <li id="uppercase" class="invalid">A <b>capital (uppercase)</b> letter</li>
+        <li id="number" class="invalid">A <b>number</b></li>
+        <li id="minChars" class="invalid">Minimum <b>8 characters</b></li>
+      </ul>
+     <h3>Credit card number</h3>
+      <ul>
+        <li id="creditnumValid" class="invalid">Enter valid credit card number </li>
+      </ul> 
+      <button type="submitButton" id="submitButton">Submit</button>
+    </form>
+
+    <script>
+      const password = document.getElementById("password");
+      const email = document.getElementById("email");
+      const ccn = document.getElementById("ccn");
+      const submitButton = document.getElementById("submitButton")
+      let isSubmitButtonDisabled = true;
+      submitButton.disabled = isSubmitButtonDisabled;
+
+      
+      email.onkeyup = function () {
+        const emailPattern =  /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+        const emailCheckElement = document.getElementById("emailCheck")
+
+        if(emailPattern.test(email.value)) {
+          emailCheckElement.classList.remove("invalid");
+          emailCheckElement.classList.add("valid");
+          isSubmitButtonDisabled = false;
+
+        } else {
+          emailCheckElement.classList.remove("valid");
+          emailCheckElement.classList.add("invalid");
+          isSubmitButtonDisabled = true;
+        }
+
+        submitButton.disabled = isSubmitButtonDisabled;
+
+      }
+
+
+      password.onkeyup = function () {
+        console.log("letter typed: ", password.value);
+
+        // regular expressions
+        const lowercaseLetterPattern = /[a-z]/;
+        const uppercaseLetterPattern = /[A-Z]/;
+        const numbersPattern = /[0-9]/;
+        const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+        // const minCharactersPattern = /.{8}/;
+
+        const lowercaseElement = document.getElementById("lowercase");
+        const uppercaseElement = document.getElementById("uppercase");
+        const numberElement = document.getElementById("number");
+        const minCharsElement = document.getElementById("minChars");
+
+
+
+        if (lowercaseLetterPattern.test(password.value)) {
+          lowercaseElement.classList.remove("invalid");
+          lowercaseElement.classList.add("valid");
+          isSubmitButtonDisabled = false;
+        } else {
+          lowercaseElement.classList.remove("valid");
+          lowercaseElement.classList.add("invalid");
+          isSubmitButtonDisabled = true;
+        }
+
+        if (uppercaseLetterPattern.test(password.value)) {
+          uppercaseElement.classList.remove("invalid");
+          uppercaseElement.classList.add("valid");
+          isSubmitButtonDisabled = false;
+
+        } else {
+          uppercaseElement.classList.remove("valid");
+          uppercaseElement.classList.add("invalid");
+          isSubmitButtonDisabled = true;
+        }
+
+        if (numbersPattern.test(password.value)) {
+          numberElement.classList.remove("invalid");
+          numberElement.classList.add("valid");
+          isSubmitButtonDisabled = false;
+
+        } else {
+          numberElement.classList.remove("valid");
+          numberElement.classList.add("invalid");
+          isSubmitButtonDisabled = true;
+        }
+
+        if (password.value.length >= 8) {
+          minCharsElement.classList.remove("invalid");
+          minCharsElement.classList.add("valid");
+          isSubmitButtonDisabled = false;
+
+        } else {
+          minCharsElement.classList.add("invalid");
+          minCharsElement.classList.remove("valid");
+          isSubmitButtonDisabled = true;
+        }
+      };
+
+      ccn.onkeyup = function () {
+        let isCreditCardNumberValid;
+        let ccNumber = ccn.value;
+
+        let arr = (ccNumber + "")
+          .split("")
+          .reverse()
+          .map((x) => parseInt(x));
+        let lastDigit = arr.splice(0, 1)[0];
+        let sum = arr.reduce((acc, val, i) =>
+          ( i % 2 !== 0 ? acc + val : acc + ((val * 2) % 9) || 9),
+          0 );
+        sum += lastDigit;
+        isccnValid = sum % 10 === 0;
+
+        const creditCardElement = document.getElementById("creditnumValid");
+
+        if (isccnValid === true) {
+          creditCardElement.classList.add("validText");
+          creditCardElement.classList.remove("invalidText");
+        } else {
+          creditCardElement.classList.add("invalidText");
+          creditCardElement.classList.remove("validText");
+        }
+
+        submitButton.disabled = !isccnValid;
+        console.log(isccnValid);
+      };
+    </script>
+  </body>
+</html>
+
+
+<!-- function validateCard(num){
+  var oddSum = 0;
+  var evenSum = 0;
+  var numToString = num.toString().split("");
+  for(var i = 0; i < numToString.length; i++){
+    if(i % 2 === 0){
+      if(numToString[i] * 2 >= 10){
+        evenSum += ((numToString[i] * 2) - 9 );
+      } else {
+        evenSum += numToString[i] * 2;
+      }
+    } else {
+      oddSum += parseInt(numToString[i]);
+    }
+  }
+  return (oddSum + evenSum) % 10 === 0;
+}
+console.log(validateCard(41111111111111111)); 
+
+----- 
+
+// Takes a credit card string value and returns true on valid number
+function valid_credit_card(value) {
+  // Accept only digits, dashes or spaces
+	if (/[^0-9-\s]+/.test(value)) return false;
+
+	// The Luhn Algorithm. It's so pretty.
+	let nCheck = 0, bEven = false;
+	value = value.replace(/\D/g, "");
+
+	for (var n = value.length - 1; n >= 0; n--) {
+		var cDigit = value.charAt(n),
+			  nDigit = parseInt(cDigit, 10);
+
+		if (bEven && (nDigit *= 2) > 9) nDigit -= 9;
+
+		nCheck += nDigit;
+		bEven = !bEven;
+	}
+
+	return (nCheck % 10) == 0;
+}
+
+-->
