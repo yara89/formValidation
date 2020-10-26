@@ -161,11 +161,11 @@
         const creditCardElement = document.getElementById("creditnumValid");
 
         if (isccnValid === true) {
-          creditCardElement.classList.add("validText");
-          creditCardElement.classList.remove("invalidText");
+          creditCardElement.classList.add("valid");
+          creditCardElement.classList.remove("invalid");
         } else {
-          creditCardElement.classList.add("invalidText");
-          creditCardElement.classList.remove("validText");
+          creditCardElement.classList.add("invalid");
+          creditCardElement.classList.remove("valid");
         }
 
         submitButton.disabled = !isccnValid;
